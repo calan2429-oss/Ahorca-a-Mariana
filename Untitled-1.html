@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica de Cálculo Mental</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 80px;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        background: white;
+        width: 400px;
+        margin: auto;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+        color: #333;
+    }
+
+    #pregunta {
+        font-size: 32px;
+        margin: 25px 0;
+        font-weight: bold;
+    }
+
+    input {
+        font-size: 22px;
+        padding: 8px;
+        width: 150px;
+        text-align: center;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    #resultado {
+        font-size: 22px;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    #puntaje {
+        margin-top: 15px;
+        font-size: 18px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cálculo Mental</h1>
+
+    <div id="pregunta"></div>
+
+    <input type="number" id="respuesta" placeholder="Respuesta">
+
+    <br>
+
+    <button onclick="verificar()">Comprobar</button>
+    <button onclick="nuevaPregunta()">Nueva</button>
+
+    <div id="resultado"></div>
+    <div id="puntaje">Aciertos: 0 | Errores: 0</div>
+</div>
+
+<script>
+let respuestaCorrecta;
+let aciertos = 0;
+let errores = 0;
+
+function nuevaPregunta() {
+
+    const tipo = Math.floor(Math.random() * 4);
+
+    let a, b;
+
+    switch(tipo) {
+
+        case 0:
+            a = Math.floor(Math.random() * 90) + 10;
+            b = Math.floor(Math.random() * 90) + 10;
+            respuestaCorrecta = a + b;
+            document.getElementById("pregunta").textContent = `${a} + ${b}`;
+            break;
+
+        case 1:
+            a = Math.floor(Math.random() * 90) + 50;
+            b = Math.floor(Math.random() * 40) + 10;
+            respuestaCorrecta = a - b;
+            document.getElementById("pregunta").textContent = `${a} - ${b}`;
+            break;
+
+        case 2:
+            a = Math.floor(Math.random() * 15) + 5;
+            b = Math.floor(Math.random() * 15) + 5;
+            respuestaCorrecta = a * b;
+            document.getElementById("pregunta").textContent = `${a} × ${b}`;
+            break;
+
+        case 3:
+            b = Math.floor(Math.random() * 11) + 2;
+            respuestaCorrecta = Math.floor(Math.random() * 20) + 5;
+            a = respuestaCorrecta * b;
+            document.getElementById("pregunta").textContent = `${a} ÷ ${b}`;
+            break;
+    }
+
+    document.getElementById("respuesta").value = "";
+    document.getElementById("resultado").textContent = "";
+}
+
+function verificar() {
+
+    const usuario = Number(document.getElementById("respuesta").value);
+
+    if(usuario === respuestaCorrecta){
+        aciertos++;
+        document.getElementById("resultado").textContent = "✅ Correcto";
+        document.getElementById("resultado").style.color = "green";
+    } else {
+        errores++;
+        document.getElementById("resultado").textContent =
+        `❌ Incorrecto. La respuesta era ${respuestaCorrecta}`;
+        document.getElementById("resultado").style.color = "red";
+    }
+
+    document.getElementById("puntaje").textContent =
+    `Aciertos: ${aciertos} | Errores: ${errores}`;
+
+    setTimeout(nuevaPregunta, 1500);
+}
+
+nuevaPregunta();
+</script>
+
+</body>
+</html>

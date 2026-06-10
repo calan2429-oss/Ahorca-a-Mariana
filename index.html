@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahorcado Matemático</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#f4f4f4;
+}
+
+.container{
+    max-width:600px;
+    margin:auto;
+    padding:20px;
+}
+
+#pregunta{
+    font-size:40px;
+    margin:20px;
+    font-weight:bold;
+}
+
+input{
+    font-size:22px;
+    padding:8px;
+    width:150px;
+    text-align:center;
+}
+
+button{
+    font-size:18px;
+    padding:10px 20px;
+    margin:10px;
+}
+
+#resultado{
+    font-size:22px;
+    margin-top:15px;
+}
+
+svg{
+    background:white;
+    border-radius:10px;
+    margin-top:20px;
+}
+.parte{
+    display:none;
+    stroke:black;
+    stroke-width:4;
+    fill:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>Ahorca a Mariana👧🏻</h1>
+
+<div id="pregunta"></div>
+
+<input type="number" id="respuesta">
+<br>
+
+<button onclick="verificar()">Responder</button>
+
+<div id="resultado"></div>
+
+<p>Errores: <span id="errores">0</span>/6</p>
+
+<svg width="250" height="300">
+
+    <!-- Horca -->
+    <line x1="40" y1="280" x2="200" y2="280" stroke="black" stroke-width="4"/>
+    <line x1="70" y1="280" x2="70" y2="30" stroke="black" stroke-width="4"/>
+    <line x1="70" y1="30" x2="170" y2="30" stroke="black" stroke-width="4"/>
+    <line x1="170" y1="30" x2="170" y2="60" stroke="black" stroke-width="4"/>
+
+    <!-- Muñeco -->
+    <circle id="p1" class="parte" cx="170" cy="85" r="25"/>
+    <line id="p2" class="parte" x1="170" y1="110" x2="170" y2="180"/>
+    <line id="p3" class="parte" x1="170" y1="130" x2="140" y2="160"/>
+    <line id="p4" class="parte" x1="170" y1="130" x2="200" y2="160"/>
+    <line id="p5" class="parte" x1="170" y1="180" x2="145" y2="220"/>
+    <line id="p6" class="parte" x1="170" y1="180" x2="195" y2="220"/>
+
+</svg>
+
+</div>
+
+<script>
+
+let respuestaCorrecta;
+let errores = 0;
+
+function generarPregunta(){
+
+    const tipo = Math.floor(Math.random()*4);
+
+    let a,b;
+
+    switch(tipo){
+
+        case 0:
+            a = Math.floor(Math.random()*90)+10;
+            b = Math.floor(Math.random()*90)+10;
+            respuestaCorrecta = a+b;
+            pregunta.textContent = `${a} + ${b}`;
+            break;
+
+        case 1:
+            a = Math.floor(Math.random()*100)+50;
+            b = Math.floor(Math.random()*40)+10;
+            respuestaCorrecta = a-b;
+            pregunta.textContent = `${a} - ${b}`;
+            break;
+
+        case 2:
+            a = Math.floor(Math.random()*15)+5;
+            b = Math.floor(Math.random()*15)+5;
+            respuestaCorrecta = a*b;
+            pregunta.textContent = `${a} × ${b}`;
+            break;
+
+        case 3:
+            b = Math.floor(Math.random()*10)+2;
+            respuestaCorrecta = Math.floor(Math.random()*20)+5;
+            a = respuestaCorrecta*b;
+            pregunta.textContent = `${a} ÷ ${b}`;
+            break;
+    }
+
+    respuesta.value = "";
+}
+
+function verificar(){
+
+    if(errores >= 6) return;
+
+    const valor = Number(document.getElementById("respuesta").value);
+
+    if(valor === respuestaCorrecta){
+
+        resultado.innerHTML = "✅ Correcto";
+        resultado.style.color = "green";
+        generarPregunta();
+
+    }else{
+
+        errores++;
+
+        document.getElementById("errores").textContent = errores;
+
+        document.getElementById("p"+errores).style.display="block";
+
+        resultado.innerHTML =
+        `❌ Incorrecto. Era ${respuestaCorrecta}`;
+        resultado.style.color = "red";
+
+        if(errores === 6){
+
+            resultado.innerHTML =
+            "💀 ¡AHORCADO! Has perdido.";
+
+            setTimeout(()=>{
+                if(confirm("¿Jugar otra vez?")){
+                    location.reload();
+                }
+            },500);
+
+        }else{
+            setTimeout(generarPregunta,1000);
+        }
+    }
+}
+
+generarPregunta();
+
+document.getElementById("respuesta")
+.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){
+        verificar();
+    }
+});
+
+</script>
+
+</body>
+</html>
